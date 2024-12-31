@@ -1,7 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 
-const HomePage = ({ navigation }) => {
+const HomePage = () => {
+    const router = useRouter();
+
+    const handleAllBhajansClick = async() => {
+        router.push('/AllBhajans');
+    }
+
     return (
         <View style={styles.container}>
             {/* Top Section (Orange) */}
@@ -32,10 +39,25 @@ const HomePage = ({ navigation }) => {
             <View style={styles.bottomSection}>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => navigation.navigate('BhajanList')}
+                    onPress={handleAllBhajansClick}
                 >
-                    <Text style={styles.buttonText}>All Bhajans</Text>
+                    <Text style={styles.buttonText}>   All Bhajans   </Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleAllBhajansClick}
+                >
+                    <Text style={styles.buttonText}>Category One</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleAllBhajansClick}
+                >
+                    <Text style={styles.buttonText}>Cateogry Two</Text>
+                </TouchableOpacity>
+
             </View>
 
             {/* Footer */}
