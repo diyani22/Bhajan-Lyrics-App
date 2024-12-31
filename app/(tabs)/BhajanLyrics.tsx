@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import bhajans from '../../bhajans.json';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -8,8 +8,14 @@ const BhajanLyrics = () => {
     const { selectedBhajanID }: { selectedBhajanID: any} = useLocalSearchParams();
     const bhajan = bhajans.find((r) => r.id == selectedBhajanID);
 
+    const [language, setLanguage] = useState('english');
+
     const handleBackClick = () => {
         router.push('/AllBhajans')
+    };
+
+    const toggleLanguage = (lang: string) => {
+        setLanguage(lang);
     };
 
     return (
@@ -18,8 +24,24 @@ const BhajanLyrics = () => {
                 {bhajan ? (
                     <>
                         <Text style={styles.title}>{bhajan?.name}</Text>
+
+                        <View style={styles.languageButtons}>
+                            <TouchableOpacity
+                                style={[styles.languageButton, language === 'english' && styles.activeButton]}
+                                onPress={() => toggleLanguage('english')}
+                            >
+                                <Text style={styles.languageButtonText}>English</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.languageButton, language === 'gujrati' && styles.activeButton]}
+                                onPress={() => toggleLanguage('gujrati')}
+                            >
+                                <Text style={styles.languageButtonText}>Gujrati</Text>
+                            </TouchableOpacity>
+                        </View>
+
                         <View style={styles.section}>
-                            <Text style={styles.lyrics}>{bhajan.lyrics}</Text>
+                            <Text style={styles.lyrics}>{bhajan[language]}</Text>
                         </View>
                     </>
                 ) : (
@@ -50,6 +72,27 @@ const styles = StyleSheet.create({
         color: 'white',
         backgroundColor: 'orange',
         padding: 20,
+    },
+    languageButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10,
+    },
+    languageButton: {
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'orange',
+        alignItems: 'center',
+    },
+    languageButtonText: {
+        fontSize: 14,
+        color: 'orange',
+    },
+    activeButton: {
+        backgroundColor: 'white',
     },
     section: {
         padding: 15,
