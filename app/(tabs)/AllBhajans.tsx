@@ -6,20 +6,42 @@ import bhajans from '../../bhajans.json';
 const AllBhajans = () => {
     const router = useRouter();
     const [selectedBhajan, setSelectedBhajan]: any = useState(null);
+    const [language, setLanguage] = useState('english');
     
     const handleBhajanClick = async (bhajan: any) => {
         const bhajanId = String(bhajan.id);
         setSelectedBhajan(bhajan);
-        router.push(`/BhajanLyrics?selectedBhajanID=${bhajanId}`);
-    }
+        router.push(`/BhajanLyrics?selectedBhajanID=${bhajanId}&language=${language}`);
+    };
 
     const handleBackClick = () => {
         router.push('/Home')
     };
 
+    const toggleLanguage = (lang: string) => {
+        setLanguage(lang);
+    };
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>All Bhajans</Text>
+            <View>
+                <Text style={styles.title}>All Bhajans</Text>
+                <View style={styles.languageButtons}>
+                    <TouchableOpacity
+                        style={[styles.languageButton, language === 'english' && styles.activeButton]}
+                        onPress={() => toggleLanguage('english')}
+                    >
+                        <Text style={styles.languageButtonText}>English</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[styles.languageButton, language === 'gujrati' && styles.activeButton]}
+                        onPress={() => toggleLanguage('gujrati')}
+                    >
+                        <Text style={styles.languageButtonText}>Gujrati</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
             <ScrollView style={styles.bhajanListContainer}>
                 <FlatList
                     data={bhajans}
@@ -29,7 +51,9 @@ const AllBhajans = () => {
                             style={styles.bhajanItem}
                             onPress={() => handleBhajanClick(item)}
                         >
-                            <Text style={styles.bhajanName}>{item.name}</Text>
+                            <Text style={styles.bhajanName}>
+                                {language === 'english' ? item.name : item.gname}
+                            </Text>
                         </TouchableOpacity>
                     )}
                 />
@@ -59,6 +83,27 @@ const styles = StyleSheet.create({
         color: 'white',
         backgroundColor: 'orange',
         padding: 20,
+    },
+    languageButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10,
+    },
+    languageButton: {
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'orange',
+        alignItems: 'center',
+    },
+    languageButtonText: {
+        fontSize: 14,
+        color: 'orange',
+    },
+    activeButton: {
+        backgroundColor: 'white',
     },
     bhajanItem: {
         padding: 15,

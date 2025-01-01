@@ -23,7 +23,9 @@ const BhajanLyrics = () => {
             <ScrollView style={styles.scrollView}>
                 {bhajan ? (
                     <>
-                        <Text style={styles.title}>{bhajan?.name}</Text>
+                        <Text style={styles.title}>
+                            {language === 'english' ? bhajan.name : bhajan.gname}
+                        </Text>
 
                         <View style={styles.languageButtons}>
                             <TouchableOpacity
