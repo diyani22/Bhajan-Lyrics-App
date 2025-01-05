@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { WebView } from 'react-native-webview';
 import bhajans from '../../bhajans.json';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
@@ -45,6 +46,19 @@ const BhajanLyrics = () => {
                         <View style={styles.section}>
                             <Text style={styles.lyrics}>{bhajan[language]}</Text>
                         </View>
+
+                        {bhajan.video && (
+                            <View style={styles.videoContainer}>
+                                <WebView
+                                    source={{ uri: bhajan.video}}
+                                    style={styles.video}
+                                    javaScriptEnabled={true}
+                                    domStorageEnabled={true}
+                                />
+                            </View>
+                        )
+
+                        }
                     </>
                 ) : (
                     <Text style={styles.error}>Bhajan not found.</Text>
@@ -106,6 +120,15 @@ const styles = StyleSheet.create({
     error: {
         fontSize: 16,
         color: 'red',
+    },
+    videoContainer: {
+        marginTop: 20,
+        height: 200,
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+    video: {
+        flex: 1,
     },
     footer: {
         backgroundColor: 'orange',
