@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
 const HomePage = () => {
@@ -10,7 +10,8 @@ const HomePage = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.bigContainer}>
+            <View style={styles.container}>
             {/* Top Section (Orange) */}
             <View style={styles.topSection}>
                 <Text style={styles.title}>Bhajan Book</Text>
@@ -65,10 +66,15 @@ const HomePage = () => {
                 <Text style={styles.footerText}>Bhajan Book</Text>
             </View>
         </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    bigContainer: {
+        flex: 1,
+        backgroundColor: 'orange',
+    },
     container: {
         flex: 1,
     },

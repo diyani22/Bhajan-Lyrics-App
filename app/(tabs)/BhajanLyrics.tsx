@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { WebView } from 'react-native-webview';
 import bhajans from '../../bhajans.json';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const BhajanLyrics = () => {
     const router = useRouter();
@@ -20,7 +21,8 @@ const BhajanLyrics = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.bigContainer}>
+            <View style={styles.container}>
             <ScrollView style={styles.scrollView}>
                 {bhajan ? (
                     <>
@@ -70,14 +72,18 @@ const BhajanLyrics = () => {
                 </TouchableOpacity>
             </View>
         </View>
+        </SafeAreaView>
     );
 
 };
 const styles = StyleSheet.create({
+    bigContainer: {
+        flex: 1,
+        backgroundColor:'orange',
+    },
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 20,
     },
     scrollView: {
         flex: 1,

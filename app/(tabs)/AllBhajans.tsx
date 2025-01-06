@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView, View, Text, FlatList, StyleSheet, Button, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import bhajans from '../../bhajans.json';
+
+const { width, height } = Dimensions.get('window');
 
 const AllBhajans = () => {
     const router = useRouter();
@@ -22,8 +24,15 @@ const AllBhajans = () => {
         setLanguage(lang);
     };
 
+    const normalizeFontSize = (size) => {
+        const scale = width/375;
+        const newSize = size * scale;
+        return Math.round(PixelRatio.roundToNearestPixel(newSize));
+    }
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.bigContainer}>
+            <View style={styles.container}>
             <View>
                 <Text style={styles.title}>All Bhajans</Text>
                 <View style={styles.languageButtons}>
@@ -42,7 +51,6 @@ const AllBhajans = () => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <ScrollView style={styles.bhajanListContainer}>
                 <FlatList
                     data={bhajans}
                     keyExtractor={(item) => item.id.toString()}
@@ -57,7 +65,6 @@ const AllBhajans = () => {
                         </TouchableOpacity>
                     )}
                 />
-            </ScrollView>
 
             <View style={styles.footer}>
                 <TouchableOpacity style={styles.backButton} onPress={handleBackClick}>
@@ -65,13 +72,17 @@ const AllBhajans = () => {
                 </TouchableOpacity>
             </View>
         </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    bigContainer: {
+        flex: 1,
+        backgroundColor: 'orange',
+    },
     container: {
         flex: 1,
-        padding: 20,
         backgroundColor: 'white',
     },
     bhajanListContainer: {
