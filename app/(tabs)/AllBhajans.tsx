@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, FlatList, StyleSheet, Button, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { SafeAreaView, View, Text, FlatList, TextInput, StyleSheet, Button, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import bhajans from '../../bhajans.json';
+import { SearchBar } from 'react-native-screens';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const AllBhajans = () => {
     const router = useRouter();
     const [selectedBhajan, setSelectedBhajan]: any = useState(null);
     const [language, setLanguage] = useState('english');
+    const [searchQuery, setSearchQuery] = useState('');
     
     const handleBhajanClick = async (bhajan: any) => {
         const bhajanId = String(bhajan.id);
@@ -24,10 +26,14 @@ const AllBhajans = () => {
         setLanguage(lang);
     };
 
+    const filteredBhajans = bhajans.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) || item.gname.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     const normalizeFontSize = (size) => {
         const scale = width/375;
         const newSize = size * scale;
-        return Math.round(PixelRatio.roundToNearestPixel(newSize));
+        return Math.round(newSize);
     }
 
     return (
@@ -35,6 +41,14 @@ const AllBhajans = () => {
             <View style={styles.container}>
             <View>
                 <Text style={styles.title}>All Bhajans</Text>
+
+                <TextInput
+                    style={styles.searchBar}
+                    placeholder="Search for a bhajan"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
+
                 <View style={styles.languageButtons}>
                     <TouchableOpacity
                         style={[styles.languageButton, language === 'english' && styles.activeButton]}
@@ -52,7 +66,7 @@ const AllBhajans = () => {
                 </View>
             </View>
                 <FlatList
-                    data={bhajans}
+                    data={filteredBhajans}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <TouchableOpacity
@@ -85,6 +99,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
+    searchBar: {
+        height: 45,
+        borderColor: 'gray',
+        borderWidth: 2,
+        borderRadius: 5,
+        paddingHorizontal: 15,
+        marginBottom: 20,
+    },
     bhajanListContainer: {
         flex: 1,
     },
@@ -98,19 +120,19 @@ const styles = StyleSheet.create({
     languageButtons: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        padding: 10,
     },
     languageButton: {
-        paddingVertical: 8,
+        paddingVertical: 12,
         paddingHorizontal: 15,
         backgroundColor: 'white',
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: 'orange',
         alignItems: 'center',
     },
     languageButtonText: {
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: 'bold',
         color: 'orange',
     },
     activeButton: {
@@ -144,7 +166,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     backButton: {
-        paddingVertical: 8,
+        paddingVertical: 10,
         paddingHorizontal: 15,
         backgroundColor: 'white',
         borderRadius: 5,

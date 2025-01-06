@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { WebView } from 'react-native-webview';
 import bhajans from '../../bhajans.json';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -11,6 +11,7 @@ const BhajanLyrics = () => {
     const bhajan = bhajans.find((r) => r.id == selectedBhajanID);
 
     const [language, setLanguage] = useState('english');
+    const [fontSize, setFontSize] = useState(16);
 
     const handleBackClick = () => {
         router.push('/AllBhajans')
@@ -18,6 +19,14 @@ const BhajanLyrics = () => {
 
     const toggleLanguage = (lang: string) => {
         setLanguage(lang);
+    };
+
+    const increaseFontSize = () => {
+        setFontSize(prevSize => prevSize + 2);
+    };
+
+    const decreaseFontSize = () => {
+        setFontSize(prevSize => (prevSize > 12 ? prevSize - 2 : prevSize));
     };
 
     return (
@@ -43,24 +52,20 @@ const BhajanLyrics = () => {
                             >
                                 <Text style={styles.languageButtonText}>Gujrati</Text>
                             </TouchableOpacity>
+
+
+                            <TouchableOpacity style={styles.fontSizeButton} onPress={increaseFontSize}>
+                                <Text style={styles.fontSizeButtonText}>+</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.fontSizeButton} onPress={decreaseFontSize}>
+                                <Text style={styles.fontSizeButtonText}>-</Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={styles.section}>
-                            <Text style={styles.lyrics}>{bhajan[language]}</Text>
+                            <Text style={[styles.lyrics, { fontSize }]}>{bhajan[language]}</Text>
                         </View>
-
-                        {bhajan.video && (
-                            <View style={styles.videoContainer}>
-                                <WebView
-                                    source={{ uri: bhajan.video}}
-                                    style={styles.video}
-                                    javaScriptEnabled={true}
-                                    domStorageEnabled={true}
-                                />
-                            </View>
-                        )
-
-                        }
                     </>
                 ) : (
                     <Text style={styles.error}>Bhajan not found.</Text>
@@ -101,16 +106,17 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     languageButton: {
-        paddingVertical: 8,
+        paddingVertical: 12,
         paddingHorizontal: 15,
         backgroundColor: 'white',
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: 'orange',
         alignItems: 'center',
     },
     languageButtonText: {
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: 'bold',
         color: 'orange',
     },
     activeButton: {
@@ -127,15 +133,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'red',
     },
-    videoContainer: {
-        marginTop: 20,
-        height: 200,
-        borderRadius: 10,
-        overflow: 'hidden',
-    },
-    video: {
-        flex: 1,
-    },
     footer: {
         backgroundColor: 'orange',
         paddingVertical: 15,
@@ -144,7 +141,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     backButton: {
-        paddingVertical: 8,
+        paddingVertical: 10,
         paddingHorizontal: 15,
         backgroundColor: 'white',
         borderRadius: 5,
@@ -153,6 +150,22 @@ const styles = StyleSheet.create({
     backButtonText: {
         fontSize: 14,
         color: 'orange',
+    },
+    fontSizeControls: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    fontSizeButton: {
+        backgroundColor: 'orange',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginHorizontal: 10,
+    },
+    fontSizeButtonText: {
+        fontSize: 20,
+        color: 'white',
     },
 });
 
